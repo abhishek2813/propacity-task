@@ -9,6 +9,7 @@ import ListView from "../components/ListView";
 function Films() {
   const [alignment, setAlignment] = useState("grid");
   const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -25,7 +26,10 @@ function Films() {
     fetchData();
   }, []);
 
-  console.warn(data);
+  const filteredData = data.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       <Grid container justifyContent={"flex-end"}>
@@ -34,6 +38,8 @@ function Films() {
             id="outlined-search"
             type="search"
             placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -60,13 +66,22 @@ function Films() {
         </Grid>
       </Grid>
       <Grid container spacing={3}>
-        {/* <ListView /> */}
-        {data &&
-          data.map((itemData, i) => (
-            <Grid item xs={4} key={i}>
-              <CardComp moivedata={itemData} moiveId={i+1}/>
+        {alignment === "grid" ? (
+          <>
+            {filteredData &&
+              filteredData.map((itemData, i) => (
+                <Grid item xs={4} key={i}>
+                  <CardComp moivedata={itemData} moiveId={i + 1} />
+                </Grid>
+              ))}
+          </>
+        ) : (
+          <>
+            <Grid item xs={12}>
+              <ListView moiveData={filteredData} />
             </Grid>
-          ))}
+          </>
+        )}
       </Grid>
     </div>
   );

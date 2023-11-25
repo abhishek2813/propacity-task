@@ -9,6 +9,8 @@ function SidebarNav() {
 
   return (
     <div>
+      {/* backgroundColor="#03123D" rtl={false}
+        style={{ height: "100vh" }} */}
       <Sidebar>
         <h1 onClick={() => navigate("/")}>Logo</h1>
         <Menu>
